@@ -2,6 +2,4 @@
 
 cd $(dirname "$0")/dist
 
-docker-compose up
-
-
+docker-compose up -d
