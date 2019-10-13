@@ -14,11 +14,11 @@ errors /var/log/caddy/po.error.log
 
 http://po-api.${host} {
 proxy / http://192.168.240.10:3000 {
-basicauth / ${user} ${password} 
 transparent
 header_upstream Connection {>Connection}
 header_upstream Upgrade {>Upgrade}
 }
+basicauth / ${user} ${password} 
 gzip
 header / -Server
 header / -Vary
