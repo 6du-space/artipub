@@ -1,0 +1,32 @@
+http://po.${host} {
+proxy / http://192.168.240.10:8000 {
+transparent
+header_upstream Connection {>Connection}
+header_upstream Upgrade {>Upgrade}
+}
+
+gzip
+header / -Server
+header / -Vary
+log  / /var/log/caddy/po.log "{status} {size} {when_unix} {remote} {method} {uri_escaped} \"{>Referer}\" \"{>User-Agent}\""
+errors /var/log/caddy/po.error.log 
+}
+
+http://po-api.${host} {
+proxy / http://192.168.240.10:3000 {
+basicauth / ${user} ${password} 
+transparent
+header_upstream Connection {>Connection}
+header_upstream Upgrade {>Upgrade}
+}
+gzip
+header / -Server
+header / -Vary
+log  / /var/log/caddy/po-api.log "{status} {size} {when_unix} {remote} {method} {uri_escaped} \"{>Referer}\" \"{>User-Agent}\""
+errors /var/log/caddy/po-api.error.log 
+}
+
+https://po.${host} {
+redir http://{host}{uri}
+tls /root/.acme.sh/${host}/fullchain.cer /root/.acme.sh/${host}/${host}.key 
+}
